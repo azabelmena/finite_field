@@ -1,3 +1,6 @@
+/*
+ * Test program for lfsr.h
+ * */
 #include"lfsr.h"
 #include<stdio.h>
 
