@@ -15,19 +15,17 @@ class Mod{
     public:
         // Constructors.
         Mod(){ // Defualt constructor, specifies just the default modulus.
-            modulus = default_modulus;
+            modulus = get_default_mod();
             value = 0;
         }
         // Specify a Mod object with a given modulus.
-        Mod(Long mod){
-            if(mod <= 0){
-                modulus = 0;
-            }
-            else{
-                modulus = mod;
-            }
+        Mod(Long val){
+            modulus = get_default_mod();
 
-            value = 0;
+            value = val % modulus;
+            if(value < 0){
+                value += modulus;
+            }
         }
         // Specify a Mod object with given modulus, and value reduced by that
         // modulus.
@@ -52,6 +50,10 @@ class Mod{
 
         const Long val() const{
             return value;
+        }
+
+        static Long get_default_mod(){
+            return default_modulus;
         }
 
         // setters
