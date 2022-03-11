@@ -1,41 +1,73 @@
 #include<stdio.h>
 #include"mod.h"
 
-Long DEFAULT_MOD = 256;
-Long MOD_8 = 8;
+const Long DEFAULT_MOD = 256;
 
 Long Mod::default_modulus = DEFAULT_MOD;
 
-Long phi_256 = Mod::get_totient(DEFAULT_MOD);
-Long phi_8 = Mod::get_totient(MOD_8);
+Long phi = Mod::get_totient(DEFAULT_MOD);
+
+void totient_test(){
+    Long phi_m = 0, phi_n = 0, phi_mn = 0;
+
+    for(int m = 1; m < 257 ; m++){
+        for(int n = 1; n < 257 ; n++){
+            phi_m = Mod::get_totient(m);
+            phi_n = Mod::get_totient(n);
+            phi_mn = Mod::get_totient(n * m);
+
+            printf("phi(%lld) = %lld\t", n, phi_m);
+            printf("phi(%lld) = %lld\t", n, phi_n);
+            printf("phi(%lld) = %lld\t | ", m*n, phi_mn);
+            printf("\t");
+
+            printf("phi(%lld) = phi(%lld)phi(%lld):\t%d\n", m*n, m,
+                    n, phi_mn == phi_m*phi_n);
+        }
+    }
+}
+
+// use only with primes.
+void prim_root_test(Long mod){
+    int veracity = false;
+    for(int a = 0; a <= mod ; a++){
+        Mod prim_root (a,mod);
+        Long pow = prim_root.order();
+
+        if(pow == mod-1){
+            veracity = true;
+        }
+
+        printf("%lld^%lld = 1 mod %lld\t | ", prim_root.val(), pow, mod);
+        printf("\t");
+        printf("%d\n", veracity);
+    }
+}
 
 int main(){
 
-    printf("phi(%lld) = %lld\n", DEFAULT_MOD, phi_256);
-    printf("phi(%lld) = %lld\n", MOD_8, phi_8);
-    printf("phi(%lld * %lld) = %lld\n", DEFAULT_MOD,MOD_8, phi_256*phi_8);
+    //printf("Totient test.");
+    //printf("-------------------------------------------------------------------\n");
+    //totient_test();
+    //printf("-------------------------------------------------------------------\n");
 
-    Mod a (27, 64);
-    Mod b (2, 3);
-    Mod c (61, 9);
-    Mod e (1, 2);
-
-
-    printf("a = %lld mod %lld\n", a.val(), a.mod());
-    printf("a = %lld mod %lld\n", b.val(), b.mod());
-    printf("a = %lld mod %lld\n", c.val(), c.mod());
-    printf("a = %lld mod %lld\n", e.val(), e.mod());
-
-    printf("ord(a) = %lld\n", a.order());
-    printf("ord(b) = %lld\n", b.order());
-    printf("ord(c) = %lld\n", c.order());
-    printf("ord(e) = %lld\n", e.order());
-
-    printf("ord_73(a) = %lld\n", a.order(73));
-    printf("ord_73(b) = %lld\n", b.order(73));
-    printf("ord_73(c) = %lld\n", c.order(73));
-    printf("ord_73(e) = %lld\n", e.order(73));
-
+     //prim_root test.
+    printf("Primitive root test.\n");
+    printf("----------------- p = 2 -------------------------------------------\n");
+    prim_root_test(2);
+    printf("----------------- p = 3 -------------------------------------------\n");
+    prim_root_test(3);
+    printf("----------------- p = 5 -------------------------------------------\n");
+    prim_root_test(5);
+    printf("----------------- p = 7 -------------------------------------------\n");
+    prim_root_test(7);
+    printf("----------------- p = 11 -------------------------------------------\n");
+    prim_root_test(11);
+    printf("----------------- p = 13 -------------------------------------------\n");
+    prim_root_test(13);
+    printf("----------------- p = 17 -------------------------------------------\n");
+    prim_root_test(17);
+    printf("-------------------------------------------------------------------\n");
 
     return 0;
 }

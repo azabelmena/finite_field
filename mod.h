@@ -90,7 +90,7 @@ class Mod{
             Long totient = 0;
 
             for(int n = 0; n < mod ; n++){
-                if(gcd(n,default_modulus) == 1){
+                if(gcd(n,mod) == 1){
                     totient++;
                 }
             }
@@ -269,7 +269,7 @@ class Mod{
                 return 1;
             }
             Long ord = 0;
-            for(Long k = 0; k < totient(modulus) ; k++){
+            for(Long k = 1; k <= totient(modulus) ; k++){
                 if(pow(k) == 1){
                     ord = k;
                 }
@@ -283,7 +283,7 @@ class Mod{
             }
             Long ord = 0;
             Mod m (value, mod);
-            for(Long k = 0; k < totient(mod) ; k++){
+            for(Long k = 1; k <= totient(mod) ; k++){
                 if(m.pow(k) == 1){
                     ord = k;
                 }
