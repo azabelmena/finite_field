@@ -12,6 +12,92 @@ class Mod{
         Long modulus;
         static Long default_modulus;
 
+        static const Long gcd(Long a, Long b){
+            Long d;
+            if(b == 0){
+                if(a<0){
+                    d = -a;
+                }
+                else{
+                    d = a;
+                }
+
+                return d;
+            }
+            if(b<0){
+                d = gcd(a,-b);
+
+                return d;
+            }
+            if(a<0){
+                d = gcd(-a,b);
+
+                return d;
+            }
+
+            Long aa = b;
+            Long bb = a%b;
+            Long qq = a/b;
+
+            d = gcd(aa,bb);
+
+            return d;
+        }
+
+        static const Long gcd(Long a, Long b, Long &x, Long &y){
+            Long d;
+            if(b == 0){
+                if(a<0){
+                    d = -a;
+                    x = -1;
+                    y = 0;
+                }
+                else{
+                    d = a;
+                    x = 1;
+                    y = 0;
+                }
+
+                return d;
+            }
+            if(b<0){
+                d = gcd(a,-b,x,y);
+                y = -y;
+
+                return d;
+            }
+            if(a<0){
+                d = gcd(-a,b,x,y);
+                x = -x;
+
+                return d;
+            }
+
+            Long aa = b;
+            Long bb = a%b;
+            Long qq = a/b;
+            Long xx,yy;
+
+            d = gcd(aa,bb,xx,yy);
+
+            x = yy;
+            y = xx-qq*yy;
+
+            return d;
+        }
+
+        static const Long totient(){
+            Long totient = 0;
+
+            for(int n = 0; n < default_modulus ; n++){
+                if(gcd(n,default_modulus) == 1){
+                    totient++;
+                }
+            }
+
+            return totient;
+        }
+
     public:
 
 /******************************************************************************
@@ -62,6 +148,10 @@ class Mod{
             return default_modulus;
         }
 
+        static Long get_totient(){
+            return totient();
+        }
+
         // setters
         void set_mod(Long mod){
             if(mod <= 0){
@@ -103,47 +193,7 @@ class Mod{
             return val*pow(val,x-1);
         }
 
-        Long gcd(Long a, Long b, Long &x, Long &y) const{
-            Long d;
-            if(b == 0){
-                if(a<0){
-                    d = -a;
-                    x = -1;
-                    y = 0;
-                }
-                else{
-                    d = a;
-                    x = 1;
-                    y = 0;
-                }
 
-                return d;
-            }
-            if(b<0){
-                d = gcd(a,-b,x,y);
-                y = -y;
-
-                return d;
-            }
-            if(a<0){
-                d = gcd(-a,b,x,y);
-                x = -x;
-
-                return d;
-            }
-
-            Long aa = b;
-            Long bb = a%b;
-            Long qq = a/b;
-            Long xx,yy;
-
-            d = gcd(aa,bb,xx,yy);
-
-            x = yy;
-            y = xx-qq*yy;
-
-            return d;
-        }
 
         Mod inverse() const{
             if(!modulus){
@@ -199,7 +249,26 @@ class Mod{
                 return Mod(0,0);
             }
 
+            if(x == 0){
+                return Mod(1,modulus);
+            }
+
+            if(x < 0){
+                return (Mod(pow(value, -x), modulus).inverse());
+            }
+
             return Mod(pow(value, x), modulus);
+        }
+
+        Long order() const{
+            Long ord = 0;
+            for(Long k = 0; k < totient() ; k++){
+                if(pow(k) == 1){
+                    ord = k;
+                }
+            }
+
+            return ord;
         }
 
 
@@ -284,20 +353,59 @@ class Mod{
         int operator==(const Mod &mod) const{
             return ((value == mod.value) && (modulus == mod.modulus));
         }
+        int operator==(Long x) const{
+            return ((value == Mod(x,modulus).value));
+        }
+
         int operator!=(const Mod &mod) const{
             return ((value != mod.value) || (modulus != mod.modulus));
         }
+        int operator!=(Long x) const{
+            return ((value != Mod(x,modulus).value));
+        }
+
         int operator<(const Mod &mod) const{
-            return (value < mod.value) && (modulus < mod.modulus);
+            if(modulus < mod.modulus){
+                return true;
+            }
+
+            return (value < mod.value);
         }
+        int operator<(Long x) const{
+            return (value < Mod(x,modulus).value);
+        }
+
         int operator>(const Mod &mod) const{
-            return (value > mod.value) && (modulus > mod.modulus);
+            if(modulus > mod.modulus){
+                return (value > mod.value);
+            }
+
+            return false;
         }
+        int operator>(Long x) const{
+            return (value > Mod(x,modulus).value);
+        }
+
         int operator>=(const Mod &mod) const{
-            return (value >= mod.value) && (modulus >= mod.modulus);
+            if(modulus >= mod.modulus){
+                return (value >= mod.value);
+            }
+
+            return false;
         }
+        int operator>=(Long x) const{
+            return (value >= Mod(x,modulus).value);
+        }
+
         int operator<=(const Mod &mod) const{
-            return (value <= mod.value) && (modulus <= mod.modulus);
+            if(modulus <= mod.modulus){
+                return true;
+            }
+
+            return (value <= mod.value);
+        }
+        int operator<=(Long x) const{
+            return (value <= Mod(x,modulus).value);
         }
 
 };
