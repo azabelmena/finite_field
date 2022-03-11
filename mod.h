@@ -86,10 +86,10 @@ class Mod{
             return d;
         }
 
-        static const Long totient(){
+        static const Long totient(Long mod){
             Long totient = 0;
 
-            for(int n = 0; n < default_modulus ; n++){
+            for(int n = 0; n < mod ; n++){
                 if(gcd(n,default_modulus) == 1){
                     totient++;
                 }
@@ -148,8 +148,8 @@ class Mod{
             return default_modulus;
         }
 
-        static Long get_totient(){
-            return totient();
+        static Long get_totient(Long mod){
+            return totient(mod);
         }
 
         // setters
@@ -160,6 +160,10 @@ class Mod{
             }
             else{
                 modulus = mod;
+                value %= mod;
+                if(value < 0){
+                    value += mod;
+                }
             }
         }
 
@@ -261,9 +265,26 @@ class Mod{
         }
 
         Long order() const{
+            if(value == 1){
+                return 1;
+            }
             Long ord = 0;
-            for(Long k = 0; k < totient() ; k++){
+            for(Long k = 0; k < totient(modulus) ; k++){
                 if(pow(k) == 1){
+                    ord = k;
+                }
+            }
+
+            return ord;
+        }
+        Long order(Long mod) const{
+            if(value == 1){
+                return 1;
+            }
+            Long ord = 0;
+            Mod m (value, mod);
+            for(Long k = 0; k < totient(mod) ; k++){
+                if(m.pow(k) == 1){
                     ord = k;
                 }
             }
