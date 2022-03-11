@@ -95,6 +95,14 @@ class Mod{
  *
 ******************************************************************************/
 
+        Long pow(Long val, Long x) const{
+            if(x == 1){
+                return val;
+            }
+
+            return val*pow(val,x-1);
+        }
+
         Long gcd(Long a, Long b, Long &x, Long &y) const{
             Long d;
             if(b == 0){
@@ -186,6 +194,14 @@ class Mod{
             return Mod(value*mod.value, modulus);
         }
 
+        Mod pow(Long x) const {
+            if(!modulus){
+                return Mod(0,0);
+            }
+
+            return Mod(pow(value, x), modulus);
+        }
+
 
 /******************************************************************************
  *
@@ -218,6 +234,10 @@ class Mod{
             return mul(Mod(x,modulus));
         }
 
+        Mod operator^(Long x) const {
+            return pow(x);
+        }
+
         Mod operator/(const Mod &mod) const{
             return mul(mod.inverse());
         }
@@ -246,6 +266,10 @@ class Mod{
         }
         Mod operator*=(Long x){
             return (*this = mul(Mod(x,modulus)));
+        }
+
+        Mod operator^=(Long x){
+            return (*this = pow(x));
         }
 
         Mod operator/=(const Mod &mod){
