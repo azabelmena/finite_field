@@ -13,7 +13,13 @@ class Mod{
         static Long default_modulus;
 
     public:
-        // Constructors.
+
+/******************************************************************************
+ *
+ * Constructors, getters, and setters.
+ *
+******************************************************************************/
+
         Mod(){ // Defualt constructor, specifies just the default modulus.
             modulus = get_default_mod();
             value = 0;
@@ -83,8 +89,71 @@ class Mod{
             }
         }
 
-        // Arithmetic
-        Mod add(const Mod mod){
+/******************************************************************************
+ *
+ * Arithmetic Fuctions.
+ *
+******************************************************************************/
+
+        Long gcd(Long a, Long b, Long &x, Long &y) const{
+            Long d;
+            if(b == 0){
+                if(a<0){
+                    d = -a;
+                    x = -1;
+                    y = 0;
+                }
+                else{
+                    d = a;
+                    x = 1;
+                    y = 0;
+                }
+
+                return d;
+            }
+            if(b<0){
+                d = gcd(a,-b,x,y);
+                y = -y;
+
+                return d;
+            }
+            if(a<0){
+                d = gcd(-a,b,x,y);
+                x = -x;
+
+                return d;
+            }
+
+            Long aa = b;
+            Long bb = a%b;
+            Long qq = a/b;
+            Long xx,yy;
+
+            d = gcd(aa,bb,xx,yy);
+
+            x = yy;
+            y = xx-qq*yy;
+
+            return d;
+        }
+
+        Mod inverse() const{
+            if(!modulus){
+                return Mod(0,0);
+            }
+            Long d, a, b;
+            Long mod = modulus, val = value;
+
+            d = gcd(val, mod, a, b);
+
+            if(d > 1){
+                return Mod(0,0);
+            }
+
+            return Mod(a, modulus);
+        }
+
+        Mod add(Mod mod) const{
             if(!modulus || !mod.modulus){
                 return Mod(0,0);
             }
@@ -95,7 +164,7 @@ class Mod{
             return Mod(value+mod.value, modulus);
         }
 
-        Mod sub(const Mod mod){
+        Mod sub(Mod mod) const{
             if(!modulus || !mod.modulus){
                 return Mod(0,0);
             }
@@ -106,7 +175,7 @@ class Mod{
             return Mod(value-mod.value, modulus);
         }
 
-        Mod mul(const Mod mod){
+        Mod mul(Mod mod) const {
             if(!modulus || !mod.modulus){
                 return Mod(0,0);
             }
@@ -118,7 +187,76 @@ class Mod{
         }
 
 
-        // Operators.
+/******************************************************************************
+ *
+ * Operators
+ *
+******************************************************************************/
+
+        // Arithmetic Operators 1.
+        Mod operator+(const Mod &mod) const {
+            return add(mod);
+        }
+        Mod operator+(Long x) const {
+            return add(Mod(x,modulus));
+        }
+
+        Mod operator-() const {
+            return Mod(-value, modulus);
+        }
+        Mod operator-(const Mod &mod) const {
+            return sub(mod);
+        }
+        Mod operator-(Long x) const {
+            return sub(Mod(x,modulus));
+        }
+
+        Mod operator*(const Mod &mod) const {
+            return mul(mod);
+        }
+        Mod operator*(Long x) const {
+            return mul(Mod(x,modulus));
+        }
+
+        Mod operator/(const Mod &mod) const{
+            return mul(mod.inverse());
+        }
+        Mod operator/(Long x) const {
+            return mul(Mod(x,modulus).inverse());
+        }
+
+        // Arithmetic Operators 2.
+
+        Mod operator+=(const Mod &mod){
+            return (*this = add(mod));
+        }
+        Mod operator+=(Long x){
+            return (*this = add(Mod(x,modulus)));
+        }
+
+        Mod operator-=(const Mod &mod){
+            return (*this = sub(mod));
+        }
+        Mod operator-=(Long x){
+            return (*this = sub(Mod(x,modulus)));
+        }
+
+        Mod operator*=(const Mod &mod){
+            return (*this = mul(mod));
+        }
+        Mod operator*=(Long x){
+            return (*this = mul(Mod(x,modulus)));
+        }
+
+        Mod operator/=(const Mod &mod){
+            return (*this = mul(mod.inverse()));
+        }
+        Mod operator/=(Long x){
+            return (*this = mul(Mod(x,modulus).inverse()));
+        }
+
+        // Comparison operators.
+
         int operator==(const Mod &mod) const{
             return ((value == mod.value) && (modulus == mod.modulus));
         }
@@ -136,19 +274,6 @@ class Mod{
         }
         int operator<=(const Mod &mod) const{
             return (value <= mod.value) && (modulus <= mod.modulus);
-        }
-
-        Mod operator+=(const Mod &mod){
-            *this = add(mod);
-            return *this;
-        }
-        Mod operator-=(const Mod &mod){
-            *this = sub(mod);
-            return *this;
-        }
-        Mod operator*=(const Mod &mod){
-            *this = mul(mod);
-            return *this;
         }
 
 };
