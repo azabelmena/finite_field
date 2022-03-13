@@ -148,6 +148,13 @@ class Mod{
             return default_modulus;
         }
 
+        static Long get_gcd(Long a, Long b){
+            return gcd(a,b);
+        }
+        static Long get_gcd(Long a, Long b, Long &x, Long &y){
+            return gcd(a,b,x,y);
+        }
+
         static Long get_totient(Long mod){
             return totient(mod);
         }
