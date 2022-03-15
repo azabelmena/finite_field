@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include"mod.h"
 
-const Long DEFAULT_MOD = 12;
+const Long DEFAULT_MOD = 3;
 
 Long Mod::default_modulus = DEFAULT_MOD;
 
@@ -45,15 +45,6 @@ void prim_root_test(Long mod){
 }
 
 int main(){
-
-    Long d = 0;
-
-    for(int i = 0; i < DEFAULT_MOD ; i++){
-        if((d = Mod::get_gcd(i,DEFAULT_MOD)) == 1){
-            printf("%lld\t", i);
-        }
-    }
-    printf("\n");
 
     //printf("Totient test.");
     //printf("-------------------------------------------------------------------\n");
