@@ -204,8 +204,6 @@ class Mod{
             return val*pow(val,x-1);
         }
 
-
-
         Mod inverse() const{
             if(!modulus){
                 return Mod(0,0);
