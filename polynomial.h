@@ -146,6 +146,12 @@ class Poly{
 
            return sum;
         }
+        Poly<K> operator+(const long long a) const{
+            Poly<K> sum_const = (*this);
+            sum_const.coef[0] += a;
+
+            return sum_const;
+        }
 
         Poly<K> operator*(const Poly<K> &f) const{
             if(is_zero() || f.is_zero()){
@@ -187,6 +193,10 @@ class Poly{
 
         Poly<K> operator+=(const Poly<K> &f){
             (*this) = (*this)+f;
+            return (*this);
+        }
+        Poly<K> operator+=(const long long a){
+            (*this) = (*this)+a;
             return (*this);
         }
 
