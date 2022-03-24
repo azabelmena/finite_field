@@ -148,9 +148,39 @@ class Poly{
         }
         Poly<K> operator+(const long long a) const{
             Poly<K> sum_const = (*this);
-            sum_const.coef[0] += a;
+            sum_const.coef[0] += K(a);
 
             return sum_const;
+        }
+
+        Poly<K> operator-(const Poly<K> &f) const{
+           long long mdeg = max_deg(degree, f.degree);
+
+           Poly<K> difference;
+           difference.set_deg(mdeg);
+
+           for(int i = 0; i <= mdeg ; i++){
+               difference.coef[i] = get(i)-f[i];
+           }
+
+           return difference;
+        }
+        Poly<K> operator-(const long long a) const{
+            Poly<K> diff_const = (*this);
+
+            diff_const.coef[0] -= K(a);
+
+            return diff_const;
+        }
+        Poly<K> operator-() const{
+            Poly<K> negative;
+            negative.set_deg(degree);
+
+            for(int i = 0; i <= degree ; i++){
+                negative.coef[i] = -coef[i];
+            }
+
+            return negative;
         }
 
         Poly<K> operator*(const Poly<K> &f) const{
@@ -197,6 +227,15 @@ class Poly{
         }
         Poly<K> operator+=(const long long a){
             (*this) = (*this)+a;
+            return (*this);
+        }
+
+        Poly<K> operator-=(const Poly<K> &f){
+            (*this) = (*this)-f;
+            return (*this);
+        }
+        Poly<K> operator-=(const long long a){
+            (*this) = (*this)-a;
             return (*this);
         }
 
