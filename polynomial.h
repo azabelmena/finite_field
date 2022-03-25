@@ -205,6 +205,21 @@ class Poly{
             return product;
         }
 
+        Poly<K> operator%(const long long n) const{
+            if(n == 0){
+                return Poly<K>(0);
+            }
+
+            Poly<K> mod;
+            mod.set_deg(degree);
+
+            for(int i = 0; i <= degree ; i++){
+                mod.coef[i] = get(i) % n;
+            }
+
+            return mod;
+        }
+
         Poly<K> operator^(const long long n) const{
             if(n == 0){
                 return Poly<K>(1);
@@ -241,6 +256,12 @@ class Poly{
 
         Poly<K> operator*=(const Poly<K> &f){
             (*this) = (*this) * f;
+
+            return (*this);
+        }
+
+        Poly<K>operator%=(const long long n){
+            (*this) = (*this) % n;
 
             return (*this);
         }
