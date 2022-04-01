@@ -25,14 +25,14 @@ int main(){
     }
     printf("\n");
 
-    //for(int i = 0; i < 10 ; i++){
-        //g -= f;
-        //for(int i = 0; i <= g.deg() ; i++){
-            ////printf("%lldx^%lld\t", g[i], i);
-            ////printf("%lldx^%lld\t", g[i].val(), i);
-        //}
-        //printf("\n");
-    //}
+    for(int i = 0; i < 10 ; i++){
+        g -= i;
+        for(int i = 0; i <= g.deg() ; i++){
+            printf("%lldx^%lld\t", g[i], i);
+            //printf("%lldx^%lld\t", g[i].val(), i);
+        }
+        printf("\t\t%d\n", i);
+    }
 
     return 0;
 }
